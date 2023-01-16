@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.rest.entity.Course;
@@ -72,24 +74,33 @@ public class StudentController {
 	}
 	
 	@DeleteMapping("/delete-student/{studentId}")
-	public ResponseEntity<Boolean> deleteStudent(@PathVariable("studentId") int studentId){
-		try {
+	public ResponseEntity<Boolean> deleteStudent(@PathVariable("studentId") int studentId) throws NoSuchStudentFoundException{
+//		try {
 			return new ResponseEntity<>(studService.deleteStudent(studentId), HttpStatus.OK);
-		}catch(NoSuchStudentFoundException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-		}
+//		}catch(NoSuchStudentFoundException e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+//		}
 	}
 	
 	@GetMapping("/courses/student/{id}")
 	public ResponseEntity<List<Course>> getCourseByStudentId(@PathVariable("id") int id){
 		try {
 			return new ResponseEntity<>(studService.findCoursesByStudenId(id), HttpStatus.FOUND);
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	
+//	@ResponseStatus(value=HttpStatus.NOT_FOUND, reason = "Student not found with this id")
+//	@ExceptionHandler({Exception.class})
+//	public void handleConflict() {
+//		
+//	}
+	
+	
+	
 	
 }
