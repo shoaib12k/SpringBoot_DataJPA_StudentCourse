@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.rest.dao.StudentRepository;
+import com.cg.rest.entity.Course;
 import com.cg.rest.entity.Student;
 import com.cg.rest.exception.NoSuchStudentFoundException;
 
@@ -43,9 +44,9 @@ public class StudentServiceImpl implements StudentService {
 		
 		studToUpdate.setStudentId(stud.getStudentId());
 		studToUpdate.setStudentName(stud.getStudentName());
-		studToUpdate.setCourse(stud.getCourse());
+		studToUpdate.setCourseList(stud.getCourseList());
 		
-		return studToUpdate;
+		return studRepo.save(studToUpdate);
 	}
 
 	@Override
@@ -58,6 +59,11 @@ public class StudentServiceImpl implements StudentService {
 			studRepo.deleteById(studentId);
 			return true;
 		}
+	}
+
+	@Override
+	public List<Course> findCoursesByStudenId(int studentId) {
+		return studRepo.findCoursesByStudenId(studentId);
 	}
 
 }
